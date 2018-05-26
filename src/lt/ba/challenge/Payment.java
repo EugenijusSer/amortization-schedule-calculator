@@ -1,11 +1,12 @@
 package lt.ba.challenge;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Payment {
     private int number;
-    private Date date;
+    private LocalDate date;
     private BigDecimal remainingAmount;
     private BigDecimal principalPayment;
     private BigDecimal interestPayment;
@@ -16,9 +17,9 @@ public class Payment {
 
     public void setNumber(int number) { this.number = number; }
 
-    public Date getDate() { return date; }
+    public LocalDate getDate() { return date; }
 
-    public void setDate(Date date) { this.date = date; }
+    public void setDate(LocalDate date) { this.date = date; }
 
     public BigDecimal getRemainingAmount() { return remainingAmount; }
 
@@ -39,4 +40,18 @@ public class Payment {
     public BigDecimal getInterestRate() { return interestRate; }
 
     public void setInterestRate(BigDecimal interestRate) { this.interestRate = interestRate; }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        return "Payment{" +
+                "number=" + number +
+                ", date=" + date.format(formatter) +
+                ", remainingAmount=" + remainingAmount +
+                ", principalPayment=" + principalPayment +
+                ", interestPayment=" + interestPayment +
+                ", totalPayment=" + totalPayment +
+                ", interestRate=" + interestRate +
+                '}';
+    }
 }

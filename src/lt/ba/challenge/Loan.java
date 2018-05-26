@@ -1,24 +1,24 @@
 package lt.ba.challenge;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Loan {
-    private Date startDate;
+    private LocalDate startDate;
     private BigDecimal presentValue;
     private BigDecimal interestRate;
     private int numberOfPeriods;
 
-    Loan(Date startDate, BigDecimal presentValue, BigDecimal interestRate, int numberOfPeriods) {
+    Loan(LocalDate startDate, BigDecimal presentValue, BigDecimal interestRate, int numberOfPeriods) {
         this.startDate = startDate;
         this.presentValue = presentValue;
         this.interestRate = interestRate.movePointLeft(2);
         this.numberOfPeriods = numberOfPeriods;
     }
 
-    public Date getStartDate() { return startDate; }
+    public LocalDate getStartDate() { return startDate; }
 
-    public void setStartDateDate(Date startDate) { this.startDate = startDate; }
+    public void setStartDateDate(LocalDate startDate) { this.startDate = startDate; }
 
     public BigDecimal getPresentValue() { return presentValue; }
 
