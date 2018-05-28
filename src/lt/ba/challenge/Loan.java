@@ -12,7 +12,7 @@ public class Loan {
     Loan(LocalDate startDate, BigDecimal presentValue, BigDecimal interestRate, int numberOfPeriods) {
         this.startDate = startDate;
         this.presentValue = presentValue;
-        this.interestRate = interestRate.movePointLeft(2);
+        this.interestRate = interestRate;
         this.numberOfPeriods = numberOfPeriods;
     }
 
