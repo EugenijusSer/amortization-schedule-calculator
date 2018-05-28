@@ -10,26 +10,22 @@ public class ScheduleGenerator {
     private final RoundingMode mode = RoundingMode.HALF_UP;
     private final int scale = 100;    //BigInteger fields scaling value
 
+    private BigDecimal monthlyInterest;
+    private BigDecimal paymentAmount;
+
     public LocalDate dateOfChange; //Field for first bonus task
     public BigDecimal newRate;  //Field for first bonus task
 
     //Method to generate amortization schedule (returns list of payments)
     public List<Payment> generateSchedule(Loan loan){
         List<Payment> schedule = new ArrayList<>();
-        BigDecimal monthlyInterest = loan.getInterestRate().divide(new BigDecimal(12),scale,mode);
-        BigDecimal paymentAmount = calculatePaymentAmount(loan).setScale(2,RoundingMode.FLOOR);
+        monthlyInterest = loan.getInterestRate().divide(new BigDecimal(12),scale,mode);
+        paymentAmount = calculatePaymentAmount(loan).setScale(2,RoundingMode.FLOOR);
         int loopTimes = loan.getNumberOfPeriods() - 2; //minus 2 to exclude first and last payment
+        Payment payment;
 
         //First payment
-        Payment payment = new Payment();
-        payment.setNumber(1);
-        payment.setDate(loan.getStartDate());
-        payment.setRemainingAmount(loan.getPresentValue());
-        payment.setTotalPayment(paymentAmount);
-        payment.setInterestPayment(payment.getRemainingAmount().multiply(monthlyInterest).setScale(2, mode));
-        payment.setPrincipalPayment(payment.getTotalPayment().subtract(payment.getInterestPayment()));
-        payment.setInterestRate(loan.getInterestRate().movePointRight(2));
-        schedule.add(payment);
+        schedule.add(createFirstPayment(loan));
 
         //Remaining payments (excluding last one)
         for (int i = 0; i < loopTimes; i++) {
@@ -82,6 +78,18 @@ public class ScheduleGenerator {
             return (BigDecimal.ONE.divide(power(basis, -exponent),scale, mode));
         else
             return BigDecimal.ONE;
+    }
+
+    private Payment createFirstPayment(Loan loan){
+        Payment payment = new Payment();
+        payment.setNumber(1);
+        payment.setDate(loan.getStartDate());
+        payment.setRemainingAmount(loan.getPresentValue());
+        payment.setTotalPayment(paymentAmount);
+        payment.setInterestPayment(payment.getRemainingAmount().multiply(monthlyInterest).setScale(2, mode));
+        payment.setPrincipalPayment(payment.getTotalPayment().subtract(payment.getInterestPayment()));
+        payment.setInterestRate(loan.getInterestRate().movePointRight(2));
+        return payment;
     }
 
     private Payment fillCommonInfo(Payment previous){
