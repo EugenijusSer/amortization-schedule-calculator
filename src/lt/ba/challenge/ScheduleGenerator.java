@@ -47,15 +47,9 @@ public class ScheduleGenerator {
             schedule.add(payment);
         }
 
-        if(loan.getNumberOfPeriods() > 1) {
+        if(loan.getNumberOfPeriods() > 1)
             //Last payment
-            payment = fillCommonInfo(schedule.get(schedule.size()-1));
-            payment.setInterestPayment(payment.getRemainingAmount().multiply(monthlyInterest).setScale(2, mode));
-            payment.setPrincipalPayment(payment.getRemainingAmount());
-            payment.setTotalPayment(payment.getPrincipalPayment().add(payment.getInterestPayment()));
-            payment.setInterestRate(loan.getInterestRate().movePointRight(2));
-            schedule.add(payment);
-        }
+            schedule.add(createLastPayment(schedule.get(schedule.size()-1), loan.getInterestRate()));
 
         return schedule;
     }
@@ -89,6 +83,15 @@ public class ScheduleGenerator {
         payment.setInterestPayment(payment.getRemainingAmount().multiply(monthlyInterest).setScale(2, mode));
         payment.setPrincipalPayment(payment.getTotalPayment().subtract(payment.getInterestPayment()));
         payment.setInterestRate(loan.getInterestRate().movePointRight(2));
+        return payment;
+    }
+
+    private Payment createLastPayment(Payment previous, BigDecimal currentInterestRate){
+        Payment payment = fillCommonInfo(previous);
+        payment.setInterestPayment(payment.getRemainingAmount().multiply(monthlyInterest).setScale(2, mode));
+        payment.setPrincipalPayment(payment.getRemainingAmount());
+        payment.setTotalPayment(payment.getPrincipalPayment().add(payment.getInterestPayment()));
+        payment.setInterestRate(currentInterestRate.movePointRight(2));
         return payment;
     }
 
