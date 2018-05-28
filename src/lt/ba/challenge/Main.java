@@ -10,6 +10,7 @@ public class Main {
     public static void main(String[] args){
         Scanner in = new Scanner(System.in);
         ScheduleGenerator generator = new ScheduleGenerator();
+        DataExporter exporter = new DataExporter();
 
         while(true) {
             LocalDate date = LocalDate.of(2017, 4, 15);
@@ -48,8 +49,11 @@ public class Main {
             }
 
             List<Payment> schedule = generator.generateSchedule(loan);
+
             for(Payment payment : schedule)
                 System.out.println(payment.toString());
+
+            exporter.exportDataToCsv(schedule);
         }
     }
 

@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 public class Payment {
     private int number;
     private LocalDate date;
@@ -12,6 +15,8 @@ public class Payment {
     private BigDecimal interestPayment;
     private BigDecimal totalPayment;
     private BigDecimal interestRate;
+
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
     public int getNumber() { return number; }
 
@@ -41,9 +46,14 @@ public class Payment {
 
     public void setInterestRate(BigDecimal interestRate) { this.interestRate = interestRate; }
 
+    public String toCsvRow() {
+        return Stream.of(String.valueOf(number), date.format(formatter), remainingAmount.toString(), principalPayment.toString(),
+                interestPayment.toString(), totalPayment.toString(), interestRate.toString())
+                .collect(Collectors.joining(","));
+    }
+
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
         return "Payment{" +
                 "number=" + number +
                 ", date=" + date.format(formatter) +
