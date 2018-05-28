@@ -20,7 +20,7 @@ public class Main {
             int num = in.nextInt();
             switch (num) {
                 case 0:
-                    return;
+                    System.exit(0);
                 case 1:
                     break;
                 case 2:
